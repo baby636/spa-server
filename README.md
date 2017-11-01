@@ -328,6 +328,50 @@ server.start();
 guarantee that it will be executed. Position specifier only affect the placement
 of your middleware in the Connect's stack.
 
+## Command line server
+
+Install globally via `npm`:
+
+     npm install spa-server -g
+
+This will install `spa-server` globally so that it can be run from the command line.
+
+### Usage
+
+     spa-server [options] [path]
+
+### Available Options
+
+`-a` Listen address. Defaults to 0.0.0.0
+
+`-d` Show dotfiles. Defaults to `ignore`
+
+`-f` Fallback URL. Example:
+
+    spa-server -f "/index.html" .
+
+`-F` Fallback handler function or object. Example:  
+
+    spa-server -F "({'*': '/index.html'})" .
+    
+
+`-h` or `-?` Show help
+
+`-l` Log format. Defaults to `combined`. See [available formats](https://github.com/expressjs/morgan#predefined-formats) 
+
+`-m` Middleware
+
+`-p` Listen port. Defaults to 8888.
+
+`-q` Quiet mode. Disables logging.
+
+`-s` Servestatic config object. See [Servestatic options](https://github.com/expressjs/serve-static#options)
+
+    # Set cache-control max-age
+    spa-server -s "({maxAge: 10000})" .
+    # Set CORS header
+    spa-server -s "({setHeaders: ((res, path) => {res.setHeader('Access-Control-Allow-Origin', '*')})})" .
+
 
 ## Changelog
 

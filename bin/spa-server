@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var morgan                   = require('morgan'),
+    serverFactory            = require('../lib/server'),
+    argv                     = require('yargs').argv,
+    extend                   = require('xtend'),
+    path                     = argv._[0],
+    port                     = argv.p || 8888,
+    address                  = argv.a || '0.0.0.0',
+    fallbackURL              = argv.f,
+    help                     = argv.h || argv['?'],
+    quiet                    = argv.q ,
+    dotfiles                 = argv.d || 'ignore',
+    logFormat                = argv.l || 'combined',
+    fallbackHandler          = eval(argv.F),
+    userServeStaticConfig    = eval(argv.s),
+    userMiddlewares          = eval(argv.m || []),
+    defaultServeStaticConfig = {dotfiles: dotfiles},
+    middleware               = [].concat(userMiddlewares),
+    serveStaticConfig        = extend({}, defaultServeStaticConfig, userServeStaticConfig);
+
+if (help || !path) {
+    console.log([
+      'usage: spa-server [options] [path]',
+      '',
+      'options:',
+      '  -a    Listen address [0.0.0.0]',
+      '  -d    Show dotfiles [ignore]',
+      '  -f    Fallback URL',
+      '  -F    Fallback handler function or object',
+      '  -h -? Print this message and exit.',
+      '  -l    Log format [combined]',
+      '  -m    Middleware',
+      '  -p    Listen port [8888]',
+      '  -q    Disable logging',
+      '  -s    Servestatic config'
+    ].join('\n'));
+    process.exit();
+  }
+
+if (fallbackURL && fallbackHandler) {
+    console.log('Error: Fallback URL (-f) and handler (-F) are mutually exclusive!');
+    process.exit(1);
+}
+
+if (!quiet) {
+    middleware.push({
+        middleware: morgan(logFormat),
+        before: '$start'
+    });
+}
+
+var server = serverFactory.create({
+    path: path,
+    port: port,
+    fallback: fallbackURL || fallbackHandler,
+    serveStaticConfig: serveStaticConfig,
+    hostname: address,
+    middleware: middleware
+  });
+
+server.start();
