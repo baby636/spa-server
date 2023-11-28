@@ -24,7 +24,7 @@
     "morgan": "^1.9.0"
   },
   "devDependencies": {
-    "cheerio": "^0.19.0",
+    "cheerio": "^0.20.0",
     "expect.js": "^0.3.1",
     "mocha": "^2.2.1",
     "request": "^2.54.0"
