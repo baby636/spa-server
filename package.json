@@ -20,7 +20,7 @@
     "mime": "^1.4.1",
     "serve-static": "^1.13.1",
     "xtend": "^4.0.1",
-    "yargs": "^10.0.3",
+    "yargs": "^13.3.0",
     "morgan": "^1.9.0"
   },
   "devDependencies": {
